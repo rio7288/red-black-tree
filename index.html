@@ -3,234 +3,346 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Red Black Tree Simulator</title>
+<title>Red-Black Tree Simulator</title>
 
 <style>
-*{
-    box-sizing:border-box;
+* {
+    box-sizing: border-box;
 }
 
-body{
-    margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    background:#0f172a;
-    color:#e2e8f0;
+body {
+    margin: 0;
+    font-family: Inter, Arial, sans-serif;
+    background: #0f172a;
+    color: #e5e7eb;
 }
 
-.container{
-    max-width:1400px;
-    margin:auto;
-    padding:20px;
+button,
+input {
+    font: inherit;
+}
+
+.app {
+    width: 100%;
+    max-width: 1450px;
+    margin: auto;
+    padding: 16px;
 }
 
 /* HEADER */
 
-header{
-    text-align:center;
-    margin-bottom:20px;
+.header {
+    text-align: center;
+    margin-bottom: 16px;
 }
 
-header h1{
-    margin:0;
-    font-size:32px;
+.header h1 {
+    margin: 0;
+    font-size: clamp(24px, 4vw, 36px);
 }
 
-header p{
-    color:#94a3b8;
+.header p {
+    margin: 7px 0 0;
+    color: #94a3b8;
 }
 
 /* CONTROLS */
 
-.controls{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    background:#1e293b;
-    padding:15px;
-    border-radius:12px;
-    margin-bottom:15px;
+.controls {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
 }
 
-input{
-    width:130px;
-    padding:11px;
-    border:none;
-    border-radius:7px;
-    background:#334155;
-    color:white;
-    font-size:15px;
+.controls input {
+    width: 150px;
+    min-width: 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: white;
+    outline: none;
 }
 
-button{
-    border:none;
-    padding:11px 16px;
-    border-radius:7px;
-    cursor:pointer;
-    background:#334155;
-    color:white;
-    font-weight:bold;
+.controls input:focus {
+    border-color: #38bdf8;
 }
 
-button:hover{
-    background:#475569;
+button {
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 13px;
+    background: #334155;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    min-height: 42px;
 }
 
-.insert{
-    background:#16a34a;
+button:hover {
+    background: #475569;
 }
 
-.delete{
-    background:#dc2626;
+button:active {
+    transform: scale(.98);
 }
 
-.play{
-    background:#2563eb;
+.btn-insert {
+    background: #16a34a;
 }
 
-.reset{
-    background:#7c3aed;
+.btn-delete {
+    background: #dc2626;
 }
 
-/* MAIN */
-
-.main{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:15px;
+.btn-play {
+    background: #2563eb;
 }
 
-.panel{
-    background:#1e293b;
-    border-radius:12px;
-    padding:15px;
+.btn-reset {
+    background: #7c3aed;
+}
+
+/* LAYOUT */
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(300px, .8fr);
+    gap: 14px;
+}
+
+.card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 14px;
+    min-width: 0;
+}
+
+.card h2,
+.card h3 {
+    margin-top: 0;
+}
+
+/* TREE AREA */
+
+.tree-wrapper {
+    width: 100%;
+    height: min(62vw, 600px);
+    min-height: 380px;
+    background: #020617;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+#treeCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 /* TREE */
 
-.tree-container{
-    height:600px;
-    overflow:auto;
-    position:relative;
-    background:#020617;
-    border-radius:10px;
+.edge {
+    stroke: #64748b;
+    stroke-width: 2.5;
 }
 
-svg{
-    width:100%;
-    height:100%;
-    min-width:800px;
+.node-circle {
+    stroke: white;
+    stroke-width: 2.5;
 }
 
-/* NODES */
-
-.node circle{
-    stroke:#fff;
-    stroke-width:3;
+.node-red {
+    fill: #dc2626;
 }
 
-.node text{
-    fill:white;
-    font-size:15px;
-    font-weight:bold;
-    text-anchor:middle;
-    dominant-baseline:middle;
+.node-black {
+    fill: #020617;
 }
 
-.red circle{
-    fill:#dc2626;
+.node-highlight {
+    stroke: #facc15;
+    stroke-width: 6;
+    filter: drop-shadow(0 0 7px #facc15);
 }
 
-.black circle{
-    fill:#020617;
+.node-text {
+    fill: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
 }
 
-.highlight circle{
-    stroke:#facc15;
-    stroke-width:6;
-    filter:drop-shadow(0 0 8px #facc15);
-}
+/* STATUS */
 
-/* EDGES */
-
-.edge{
-    stroke:#64748b;
-    stroke-width:3;
+.status {
+    margin-top: 10px;
+    padding: 11px;
+    background: #0f172a;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    line-height: 1.5;
 }
 
 /* HISTORY */
 
-.history{
-    max-height:500px;
-    overflow-y:auto;
+.history {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
-.step{
-    padding:12px;
-    margin-bottom:8px;
-    border-radius:8px;
-    background:#334155;
-    cursor:pointer;
+.history-empty {
+    color: #94a3b8;
 }
 
-.step.active{
-    background:#2563eb;
+.step {
+    padding: 10px;
+    margin-bottom: 7px;
+    border-radius: 8px;
+    background: #334155;
+    cursor: pointer;
+    border: 1px solid transparent;
 }
 
-.step-title{
-    font-weight:bold;
-    margin-bottom:5px;
+.step:hover {
+    border-color: #64748b;
 }
 
-.step-desc{
-    color:#cbd5e1;
-    font-size:14px;
-    line-height:1.4;
+.step.active {
+    background: #1d4ed8;
+    border-color: #60a5fa;
 }
 
-/* RULE PANEL */
-
-.rule-box{
-    margin-top:15px;
-    padding:15px;
-    background:#020617;
-    border-radius:10px;
+.step-title {
+    font-weight: bold;
+    font-size: 14px;
 }
 
-.rule-box h3{
-    margin-top:0;
-    color:#facc15;
+.step-description {
+    margin-top: 4px;
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.4;
 }
 
-.case{
-    padding:10px;
-    margin-top:8px;
-    border-radius:7px;
-    background:#1e293b;
+/* DYNAMIC RULE */
+
+.rule-panel {
+    margin-top: 14px;
 }
 
-.case strong{
-    display:block;
-    margin-bottom:4px;
+.rule {
+    border-radius: 9px;
+    padding: 13px;
+    border: 1px solid #475569;
+    background: #0f172a;
 }
 
-.status{
-    margin-top:10px;
-    padding:10px;
-    background:#334155;
-    border-radius:7px;
+.rule-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
-/* RESPONSIVE */
+.rule-label {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #334155;
+    font-size: 12px;
+    margin-bottom: 9px;
+}
 
-@media(max-width:900px){
+.rule-action {
+    margin-top: 9px;
+    padding: 9px;
+    background: #1e293b;
+    border-radius: 7px;
+}
 
-    .main{
-        grid-template-columns:1fr;
+.idle-rule {
+    color: #94a3b8;
+}
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+    .app {
+        padding: 10px;
     }
 
-    .tree-container{
-        height:500px;
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .tree-wrapper {
+        height: 470px;
+        min-height: 330px;
+    }
+
+    .history {
+        max-height: 320px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .header p {
+        font-size: 13px;
+    }
+
+    .controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .controls input {
+        width: 100%;
+        grid-column: 1 / -1;
+    }
+
+    .controls button {
+        width: 100%;
+        padding: 10px 6px;
+        font-size: 13px;
+    }
+
+    .tree-wrapper {
+        height: 390px;
+    }
+
+    .card {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .controls {
+        grid-template-columns: 1fr;
+    }
+
+    .controls input {
+        grid-column: auto;
+    }
+
+    .tree-wrapper {
+        height: 350px;
     }
 }
 </style>
@@ -238,148 +350,124 @@ svg{
 
 <body>
 
-<div class="container">
+<div class="app">
 
-<header>
-    <h1>🔴⚫ Red-Black Tree Simulator</h1>
-    <p>Interactive Insertion • Deletion • Rotations • Step-by-Step Rules</p>
-</header>
+    <header class="header">
+        <h1>🔴⚫ Red-Black Tree Simulator</h1>
+        <p>Step-by-step insertion with automatic case detection</p>
+    </header>
 
-<!-- CONTROLS -->
+    <!-- CONTROLS -->
 
-<div class="controls">
+    <section class="controls">
 
-    <input
-        id="valueInput"
-        type="number"
-        placeholder="Enter value"
-    >
+        <input
+            id="valueInput"
+            type="number"
+            inputmode="numeric"
+            placeholder="Enter number"
+        >
 
-    <button class="insert" onclick="insertValue()">
-        ➕ Insert
-    </button>
+        <button class="btn-insert" id="insertBtn">
+            ➕ Insert
+        </button>
 
-    <button class="delete" onclick="deleteValue()">
-        🗑 Delete
-    </button>
+        <button class="btn-delete" id="deleteBtn">
+            🗑 Delete
+        </button>
 
-    <button class="play" onclick="playSteps()">
-        ▶ Play
-    </button>
+        <button class="btn-play" id="playBtn">
+            ▶ Play
+        </button>
 
-    <button onclick="pauseSteps()">
-        ⏸ Pause
-    </button>
+        <button id="pauseBtn">
+            ⏸ Pause
+        </button>
 
-    <button onclick="previousStep()">
-        ⏮ Previous
-    </button>
+        <button id="prevBtn">
+            ◀ Previous
+        </button>
 
-    <button onclick="nextStep()">
-        Next ⏭
-    </button>
+        <button id="nextBtn">
+            Next ▶
+        </button>
 
-    <button class="reset" onclick="resetTree()">
-        ↻ Reset
-    </button>
+        <button class="btn-reset" id="resetBtn">
+            ↻ Reset
+        </button>
+
+    </section>
+
+
+    <!-- MAIN -->
+
+    <main class="layout">
+
+        <!-- TREE -->
+
+        <section class="card">
+
+            <h2>Tree</h2>
+
+            <div class="tree-wrapper">
+                <svg id="treeCanvas"
+                     viewBox="0 0 1000 600"
+                     preserveAspectRatio="xMidYMid meet">
+                </svg>
+            </div>
+
+            <div class="status" id="status">
+                Ready. Enter a number and press Insert.
+            </div>
+
+        </section>
+
+
+        <!-- SIDE -->
+
+        <aside>
+
+            <section class="card">
+
+                <h2>📜 Step History</h2>
+
+                <div id="history" class="history">
+                    <div class="history-empty">
+                        No operation yet.
+                    </div>
+                </div>
+
+            </section>
+
+
+            <section class="card rule-panel">
+
+                <h2>📖 Current Rule</h2>
+
+                <div id="rulePanel" class="rule">
+                    <div class="idle-rule">
+                        The rule applied to the current step
+                        will appear here.
+                    </div>
+                </div>
+
+            </section>
+
+        </aside>
+
+    </main>
 
 </div>
 
-<div class="main">
-
-    <!-- TREE -->
-
-    <div class="panel">
-
-        <h2>Tree Visualization</h2>
-
-        <div class="tree-container">
-            <svg id="treeSvg"></svg>
-        </div>
-
-        <div class="status" id="status">
-            Ready. Insert a value to start.
-        </div>
-
-    </div>
-
-    <!-- SIDE PANEL -->
-
-    <div>
-
-        <div class="panel">
-
-            <h2>📜 Step History</h2>
-
-            <div id="history" class="history">
-                <p style="color:#94a3b8">
-                    No operations yet.
-                </p>
-            </div>
-
-        </div>
-
-        <div class="panel rule-box">
-
-            <h3>📖 Insertion Rules</h3>
-
-            <div class="case">
-                <strong>🔴 Case 1 — Red Uncle</strong>
-                Parent and Uncle are RED.
-                <br>
-                ➜ Recolor Parent and Uncle BLACK.
-                <br>
-                ➜ Recolor Grandparent RED.
-            </div>
-
-            <div class="case">
-                <strong>🔺 Case 2 — Triangle</strong>
-                Parent and Node form a triangle.
-                <br>
-                ➜ Rotate around Parent.
-                <br>
-                ➜ Convert into Case 3.
-            </div>
-
-            <div class="case">
-                <strong>📏 Case 3 — Line</strong>
-                Parent and Node form a straight line.
-                <br>
-                ➜ Rotate around Grandparent.
-                <br>
-                ➜ Recolor Parent and Grandparent.
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-</div>
 
 <script>
 
 /* =========================================================
-   RED BLACK TREE
+   CONSTANTS
 ========================================================= */
 
 const RED = "RED";
 const BLACK = "BLACK";
-
-class Node{
-
-    constructor(value){
-
-        this.value = value;
-
-        this.color = RED;
-
-        this.left = null;
-        this.right = null;
-        this.parent = null;
-    }
-}
 
 let root = null;
 
@@ -389,149 +477,254 @@ let currentStep = -1;
 
 let playing = false;
 
-let timer = null;
+let playTimer = null;
+
+
+/* =========================================================
+   NODE
+========================================================= */
+
+class Node {
+
+    constructor(value) {
+
+        this.value = value;
+
+        this.color = RED;
+
+        this.left = null;
+
+        this.right = null;
+
+        this.parent = null;
+    }
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function cloneTree(node) {
+
+    if (!node) return null;
+
+    const copy = new Node(node.value);
+
+    copy.color = node.color;
+
+    copy.left = cloneTree(node.left);
+
+    copy.right = cloneTree(node.right);
+
+    if (copy.left) {
+        copy.left.parent = copy;
+    }
+
+    if (copy.right) {
+        copy.right.parent = copy;
+    }
+
+    return copy;
+}
+
+
+function addStep(title, description, ruleType = "none", nodes = []) {
+
+    history.push({
+
+        title,
+
+        description,
+
+        ruleType,
+
+        nodes,
+
+        snapshot: cloneTree(root)
+    });
+}
+
+
+/* =========================================================
+   INSERT BUTTON
+========================================================= */
+
+function insertValue() {
+
+    const input = document.getElementById("valueInput");
+
+    const value = Number(input.value);
+
+    if (!Number.isInteger(value)) {
+
+        alert("Please enter a valid integer.");
+
+        return;
+    }
+
+    input.value = "";
+
+    stopPlaying();
+
+    history = [];
+
+    currentStep = -1;
+
+    performInsert(value);
+
+    renderHistory();
+
+    currentStep = 0;
+
+    renderCurrentStep();
+}
 
 
 /* =========================================================
    INSERT
 ========================================================= */
 
-function insertValue(){
+function performInsert(value) {
 
-    const input = document.getElementById("valueInput");
+    const newNode = new Node(value);
 
-    const value = Number(input.value);
-
-    if(!Number.isInteger(value)){
-        alert("Enter a valid integer.");
-        return;
-    }
-
-    input.value = "";
-
-    history = [];
-
-    currentStep = -1;
-
-    insert(value);
-
-    renderHistory();
-
-    currentStep = history.length - 1;
-
-    renderStep();
-
-}
-
-
-/* =========================================================
-   BST INSERTION
-========================================================= */
-
-function insert(value){
-
-    let node = new Node(value);
-
-    addHistory(
-        "Insert " + value,
-        `New node ${value} is inserted as RED using normal BST insertion.`
+    addStep(
+        `Insert ${value}`,
+        `Start normal BST insertion. Node ${value} is initially RED.`,
+        "insert",
+        [value]
     );
 
-    if(root === null){
 
-        root = node;
+    /* EMPTY TREE */
 
-        addHistory(
-            "Root Rule",
-            `Node ${value} is the root. Rule: Root must always be BLACK.`
+    if (!root) {
+
+        root = newNode;
+
+        addStep(
+            "Root Created",
+            `${value} becomes the root of the tree.`,
+            "root",
+            [value]
         );
 
-        node.color = BLACK;
+        root.color = BLACK;
 
-        addHistory(
-            "Recolor",
-            `Node ${value} changed from RED → BLACK.`
+        addStep(
+            "Root Rule",
+            `Root must always be BLACK. ${value} is recolored RED → BLACK.`,
+            "root",
+            [value]
         );
 
         return;
     }
+
+
+    /* BST INSERTION */
 
     let current = root;
 
-    while(true){
+    while (true) {
 
-        if(value === current.value){
+        if (value === current.value) {
 
-            addHistory(
-                "Duplicate",
-                `${value} already exists. Duplicate values are ignored.`
+            addStep(
+                "Duplicate Value",
+                `${value} already exists. Duplicate values are not inserted.`,
+                "none",
+                [value]
             );
 
             return;
         }
 
-        if(value < current.value){
 
-            if(current.left === null){
+        if (value < current.value) {
 
-                current.left = node;
+            if (!current.left) {
 
-                node.parent = current;
+                current.left = newNode;
+
+                newNode.parent = current;
 
                 break;
 
-            }else{
+            } else {
 
                 current = current.left;
             }
 
-        }else{
+        } else {
 
-            if(current.right === null){
+            if (!current.right) {
 
-                current.right = node;
+                current.right = newNode;
 
-                node.parent = current;
+                newNode.parent = current;
 
                 break;
 
-            }else{
+            } else {
 
                 current = current.right;
             }
         }
     }
 
-    fixInsertion(node);
+
+    addStep(
+        "BST Insert Complete",
+        `${value} was inserted as a RED node under ${newNode.parent.value}.`,
+        "insert",
+        [value, newNode.parent.value]
+    );
+
+
+    fixInsertion(newNode);
 }
 
 
 /* =========================================================
-   INSERTION FIX
+   RED-BLACK INSERTION FIX
 ========================================================= */
 
-function fixInsertion(z){
+function fixInsertion(z) {
 
-    while(z !== root && z.parent.color === RED){
+    while (z !== root && z.parent.color === RED) {
 
-        let parent = z.parent;
+        const parent = z.parent;
 
-        let grandparent = parent.parent;
+        const grandparent = parent.parent;
 
-        /* LEFT SIDE */
 
-        if(parent === grandparent.left){
+        /* =========================================
+           PARENT IS LEFT CHILD
+        ========================================= */
 
-            let uncle = grandparent.right;
+        if (parent === grandparent.left) {
+
+            const uncle = grandparent.right;
+
 
             /* CASE 1 */
 
-            if(uncle && uncle.color === RED){
+            if (uncle && uncle.color === RED) {
 
-                addHistory(
+                addStep(
                     "Case 1 — Red Uncle",
-                    `Parent ${parent.value} and Uncle ${uncle.value} are RED. Recolor Parent and Uncle BLACK, and Grandparent ${grandparent.value} RED.`
+                    `Parent ${parent.value} and Uncle ${uncle.value} are RED.`,
+                    "case1",
+                    [
+                        z.value,
+                        parent.value,
+                        uncle.value,
+                        grandparent.value
+                    ]
                 );
+
 
                 parent.color = BLACK;
 
@@ -539,63 +732,122 @@ function fixInsertion(z){
 
                 grandparent.color = RED;
 
-                addHistory(
-                    "Recolor",
-                    `Parent ${parent.value} → BLACK, Uncle ${uncle.value} → BLACK, Grandparent ${grandparent.value} → RED.`
+
+                addStep(
+                    "Case 1 — Recolor",
+                    `Parent ${parent.value} → BLACK, Uncle ${uncle.value} → BLACK, Grandparent ${grandparent.value} → RED.`,
+                    "case1",
+                    [
+                        parent.value,
+                        uncle.value,
+                        grandparent.value
+                    ]
                 );
+
 
                 z = grandparent;
 
             }
 
-            /* CASE 2 */
+            /* CASE 2 + 3 */
 
-            else{
+            else {
 
-                if(z === parent.right){
+                /* TRIANGLE */
 
-                    addHistory(
+                if (z === parent.right) {
+
+                    addStep(
                         "Case 2 — Triangle",
-                        `Nodes ${grandparent.value}, ${parent.value}, ${z.value} form a triangle. Left rotation at Parent ${parent.value}.`
+                        `Parent ${parent.value} and Node ${z.value} form a triangle.`,
+                        "case2",
+                        [
+                            z.value,
+                            parent.value,
+                            grandparent.value
+                        ]
                     );
 
+
+                    rotateLeft(parent);
+
+
+                    addStep(
+                        "Case 2 — Rotation",
+                        `Left rotation performed at Parent ${parent.value}. The triangle becomes a straight line.`,
+                        "case2",
+                        [
+                            z.value,
+                            parent.value
+                        ]
+                    );
+
+
                     z = parent;
-
-                    rotateLeft(z);
-
                 }
 
-                /* CASE 3 */
 
-                addHistory(
+                /* LINE */
+
+                addStep(
                     "Case 3 — Line",
-                    `Straight-line configuration detected. Right rotation at Grandparent ${grandparent.value} and recoloring.`
+                    `Node ${z.value} and Parent ${z.parent.value} form a straight line. Uncle is BLACK.`,
+                    "case3",
+                    [
+                        z.value,
+                        z.parent.value,
+                        grandparent.value
+                    ]
                 );
 
-                parent.color = BLACK;
+
+                z.parent.color = BLACK;
 
                 grandparent.color = RED;
 
+
                 rotateRight(grandparent);
 
+
+                addStep(
+                    "Case 3 — Rotation + Recolor",
+                    `Right rotation at Grandparent ${grandparent.value}. Parent becomes BLACK and Grandparent becomes RED.`,
+                    "case3",
+                    [
+                        z.value,
+                        z.parent.value,
+                        grandparent.value
+                    ]
+                );
             }
 
         }
 
-        /* RIGHT SIDE — MIRROR */
+        /* =========================================
+           PARENT IS RIGHT CHILD — MIRROR
+        ========================================= */
 
-        else{
+        else {
 
-            let uncle = grandparent.left;
+            const uncle = grandparent.left;
+
 
             /* CASE 1 */
 
-            if(uncle && uncle.color === RED){
+            if (uncle && uncle.color === RED) {
 
-                addHistory(
+                addStep(
                     "Case 1 — Red Uncle",
-                    `Parent ${parent.value} and Uncle ${uncle.value} are RED. Recolor Parent and Uncle BLACK, and Grandparent ${grandparent.value} RED.`
+                    `Parent ${parent.value} and Uncle ${uncle.value} are RED.`,
+                    "case1",
+                    [
+                        z.value,
+                        parent.value,
+                        uncle.value,
+                        grandparent.value
+                    ]
                 );
+
 
                 parent.color = BLACK;
 
@@ -603,48 +855,110 @@ function fixInsertion(z){
 
                 grandparent.color = RED;
 
-                z = grandparent;
 
-            }
-
-            /* CASE 2 */
-
-            else{
-
-                if(z === parent.left){
-
-                    addHistory(
-                        "Case 2 — Triangle",
-                        `Mirror triangle detected. Right rotation at Parent ${parent.value}.`
-                    );
-
-                    z = parent;
-
-                    rotateRight(z);
-                }
-
-                /* CASE 3 */
-
-                addHistory(
-                    "Case 3 — Line",
-                    `Mirror straight-line configuration. Left rotation at Grandparent ${grandparent.value} and recoloring.`
+                addStep(
+                    "Case 1 — Recolor",
+                    `Parent ${parent.value} → BLACK, Uncle ${uncle.value} → BLACK, Grandparent ${grandparent.value} → RED.`,
+                    "case1",
+                    [
+                        parent.value,
+                        uncle.value,
+                        grandparent.value
+                    ]
                 );
 
-                parent.color = BLACK;
+
+                z = grandparent;
+            }
+
+            /* CASE 2 + 3 MIRROR */
+
+            else {
+
+                /* TRIANGLE */
+
+                if (z === parent.left) {
+
+                    addStep(
+                        "Case 2 — Mirror Triangle",
+                        `Node ${z.value} and Parent ${parent.value} form a mirror triangle.`,
+                        "case2",
+                        [
+                            z.value,
+                            parent.value,
+                            grandparent.value
+                        ]
+                    );
+
+
+                    rotateRight(parent);
+
+
+                    addStep(
+                        "Case 2 — Rotation",
+                        `Right rotation performed at Parent ${parent.value}.`,
+                        "case2",
+                        [
+                            z.value,
+                            parent.value
+                        ]
+                    );
+
+
+                    z = parent;
+                }
+
+
+                /* LINE */
+
+                addStep(
+                    "Case 3 — Mirror Line",
+                    `Node ${z.value} and Parent ${z.parent.value} form a straight mirror line. Uncle is BLACK.`,
+                    "case3",
+                    [
+                        z.value,
+                        z.parent.value,
+                        grandparent.value
+                    ]
+                );
+
+
+                z.parent.color = BLACK;
 
                 grandparent.color = RED;
 
+
                 rotateLeft(grandparent);
+
+
+                addStep(
+                    "Case 3 — Rotation + Recolor",
+                    `Left rotation at Grandparent ${grandparent.value}. Parent becomes BLACK and Grandparent becomes RED.`,
+                    "case3",
+                    [
+                        z.value,
+                        z.parent.value,
+                        grandparent.value
+                    ]
+                );
             }
         }
     }
 
-    root.color = BLACK;
 
-    addHistory(
-        "Root Rule",
-        "Final check: Root must always be BLACK."
-    );
+    /* ROOT MUST BE BLACK */
+
+    if (root.color !== BLACK) {
+
+        root.color = BLACK;
+
+        addStep(
+            "Root Rule",
+            `The root must always be BLACK. Root ${root.value} is recolored BLACK.`,
+            "root",
+            [root.value]
+        );
+    }
 }
 
 
@@ -652,30 +966,29 @@ function fixInsertion(z){
    LEFT ROTATION
 ========================================================= */
 
-function rotateLeft(x){
+function rotateLeft(x) {
 
-    let y = x.right;
+    const y = x.right;
 
-    if(!y) return;
+    if (!y) return;
 
     x.right = y.left;
 
-    if(y.left){
-
+    if (y.left) {
         y.left.parent = x;
     }
 
     y.parent = x.parent;
 
-    if(!x.parent){
+    if (!x.parent) {
 
         root = y;
 
-    }else if(x === x.parent.left){
+    } else if (x === x.parent.left) {
 
         x.parent.left = y;
 
-    }else{
+    } else {
 
         x.parent.right = y;
     }
@@ -683,7 +996,6 @@ function rotateLeft(x){
     y.left = x;
 
     x.parent = y;
-
 }
 
 
@@ -691,30 +1003,29 @@ function rotateLeft(x){
    RIGHT ROTATION
 ========================================================= */
 
-function rotateRight(x){
+function rotateRight(x) {
 
-    let y = x.left;
+    const y = x.left;
 
-    if(!y) return;
+    if (!y) return;
 
     x.left = y.right;
 
-    if(y.right){
-
+    if (y.right) {
         y.right.parent = x;
     }
 
     y.parent = x.parent;
 
-    if(!x.parent){
+    if (!x.parent) {
 
         root = y;
 
-    }else if(x === x.parent.left){
+    } else if (x === x.parent.left) {
 
         x.parent.left = y;
 
-    }else{
+    } else {
 
         x.parent.right = y;
     }
@@ -729,62 +1040,74 @@ function rotateRight(x){
    DELETE
 ========================================================= */
 
-function deleteValue(){
+function deleteValue() {
 
     const input = document.getElementById("valueInput");
 
     const value = Number(input.value);
 
-    if(!Number.isInteger(value)){
-        alert("Enter a valid integer.");
+    if (!Number.isInteger(value)) {
+
+        alert("Please enter a valid integer.");
+
         return;
     }
 
     input.value = "";
 
+    stopPlaying();
+
     history = [];
 
     currentStep = -1;
 
-    const node = findNode(root,value);
 
-    if(!node){
+    const node = findNode(root, value);
 
-        addHistory(
+    if (!node) {
+
+        addStep(
             "Delete",
-            `${value} does not exist in the tree.`
+            `${value} does not exist in the tree.`,
+            "none",
+            [value]
         );
 
-        renderHistory();
+    } else {
 
-        currentStep = history.length - 1;
+        /*
+         Educational BST deletion.
+         Full RB deletion fix-up can be added separately.
+        */
 
-        renderStep();
+        addStep(
+            "Delete",
+            `Deleting node ${value}.`,
+            "delete",
+            [value]
+        );
 
-        return;
+        bstDelete(node);
+
+        if (root) {
+
+            root.color = BLACK;
+        }
+
+        addStep(
+            "Delete Complete",
+            `${value} has been removed. Root is checked and kept BLACK.`,
+            "delete",
+            []
+        );
     }
 
-    /*
-       Simplified educational deletion.
-
-       The full deletion fix-up algorithm is more complex
-       and will be added separately if required.
-    */
-
-    deleteBST(node);
-
-    root.color = BLACK;
-
-    addHistory(
-        "Delete",
-        `Node ${value} was deleted using BST deletion. Root restored to BLACK.`
-    );
 
     renderHistory();
 
-    currentStep = history.length - 1;
+    currentStep = 0;
 
-    renderStep();
+    renderCurrentStep();
 }
 
 
@@ -792,64 +1115,69 @@ function deleteValue(){
    BST DELETE
 ========================================================= */
 
-function deleteBST(node){
+function bstDelete(node) {
 
-    if(!node.left && !node.right){
+    if (!node.left && !node.right) {
 
-        replaceNode(node,null);
-
-        return;
-    }
-
-    if(node.left && !node.right){
-
-        replaceNode(node,node.left);
+        replaceNode(node, null);
 
         return;
     }
 
-    if(!node.left && node.right){
 
-        replaceNode(node,node.right);
+    if (node.left && !node.right) {
+
+        replaceNode(node, node.left);
 
         return;
     }
+
+
+    if (!node.left && node.right) {
+
+        replaceNode(node, node.right);
+
+        return;
+    }
+
 
     let successor = node.right;
 
-    while(successor.left){
+    while (successor.left) {
 
         successor = successor.left;
     }
+
 
     node.value = successor.value;
 
     node.color = successor.color;
 
-    deleteBST(successor);
+    bstDelete(successor);
 }
 
 
 /* =========================================================
-   REPLACE NODE
+   REPLACE
 ========================================================= */
 
-function replaceNode(oldNode,newNode){
+function replaceNode(oldNode, newNode) {
 
-    if(!oldNode.parent){
+    if (!oldNode.parent) {
 
         root = newNode;
 
-    }else if(oldNode === oldNode.parent.left){
+    } else if (oldNode === oldNode.parent.left) {
 
         oldNode.parent.left = newNode;
 
-    }else{
+    } else {
 
         oldNode.parent.right = newNode;
     }
 
-    if(newNode){
+
+    if (newNode) {
 
         newNode.parent = oldNode.parent;
     }
@@ -857,71 +1185,23 @@ function replaceNode(oldNode,newNode){
 
 
 /* =========================================================
-   FIND NODE
+   FIND
 ========================================================= */
 
-function findNode(node,value){
+function findNode(node, value) {
 
-    if(!node) return null;
+    if (!node) return null;
 
-    if(node.value === value) return node;
+    if (node.value === value) return node;
 
-    if(value < node.value){
+    if (value < node.value) {
 
-        return findNode(node.left,value);
+        return findNode(node.left, value);
 
-    }else{
+    } else {
 
-        return findNode(node.right,value);
+        return findNode(node.right, value);
     }
-}
-
-
-/* =========================================================
-   HISTORY
-========================================================= */
-
-function addHistory(title,description){
-
-    history.push({
-
-        title:title,
-
-        description:description,
-
-        snapshot:cloneTree(root)
-
-    });
-}
-
-
-/* =========================================================
-   CLONE TREE
-========================================================= */
-
-function cloneTree(original){
-
-    if(!original) return null;
-
-    const copy = new Node(original.value);
-
-    copy.color = original.color;
-
-    copy.left = cloneTree(original.left);
-
-    copy.right = cloneTree(original.right);
-
-    if(copy.left){
-
-        copy.left.parent = copy;
-    }
-
-    if(copy.right){
-
-        copy.right.parent = copy;
-    }
-
-    return copy;
 }
 
 
@@ -929,181 +1209,288 @@ function cloneTree(original){
    HISTORY UI
 ========================================================= */
 
-function renderHistory(){
+function renderHistory() {
 
     const container = document.getElementById("history");
 
     container.innerHTML = "";
 
-    history.forEach((step,index)=>{
 
-        const div = document.createElement("div");
+    if (!history.length) {
 
-        div.className = "step";
-
-        div.innerHTML = `
-
-            <div class="step-title">
-                Step ${index + 1}: ${step.title}
-            </div>
-
-            <div class="step-desc">
-                ${step.description}
-            </div>
-
-        `;
-
-        div.onclick = ()=>{
-
-            currentStep = index;
-
-            renderStep();
-
-        };
-
-        container.appendChild(div);
-
-    });
-}
-
-
-/* =========================================================
-   SHOW CURRENT STEP
-========================================================= */
-
-function renderStep(){
-
-    if(currentStep < 0 || currentStep >= history.length){
-
-        drawTree(root);
+        container.innerHTML =
+            `<div class="history-empty">
+                No operation yet.
+            </div>`;
 
         return;
     }
 
-    const snapshot = history[currentStep].snapshot;
 
-    drawTree(snapshot);
+    history.forEach((step, index) => {
 
-    document.querySelectorAll(".step").forEach((element,index)=>{
+        const element = document.createElement("div");
 
-        element.classList.toggle(
-            "active",
-            index === currentStep
-        );
+        element.className = "step";
 
+        element.innerHTML = `
+            <div class="step-title">
+                Step ${index + 1}: ${step.title}
+            </div>
+
+            <div class="step-description">
+                ${step.description}
+            </div>
+        `;
+
+
+        element.addEventListener("click", () => {
+
+            currentStep = index;
+
+            renderCurrentStep();
+        });
+
+
+        container.appendChild(element);
     });
-
-    document.getElementById("status").innerText =
-
-        "Step " +
-        (currentStep + 1) +
-        " / " +
-        history.length +
-        " — " +
-        history[currentStep].title +
-        ": " +
-        history[currentStep].description;
 }
 
 
 /* =========================================================
-   NEXT
+   CURRENT STEP
 ========================================================= */
 
-function nextStep(){
+function renderCurrentStep() {
 
-    if(currentStep < history.length - 1){
+    if (currentStep < 0 || currentStep >= history.length) {
 
-        currentStep++;
+        drawTree(root, []);
 
-        renderStep();
+        showIdleRule();
 
-    }else{
-
-        pauseSteps();
+        return;
     }
+
+
+    const step = history[currentStep];
+
+    drawTree(step.snapshot, step.nodes);
+
+    updateRulePanel(step);
+
+    updateStatus(step);
+
+    updateHistorySelection();
 }
 
 
 /* =========================================================
-   PREVIOUS
+   HISTORY SELECTION
 ========================================================= */
 
-function previousStep(){
+function updateHistorySelection() {
 
-    if(currentStep > 0){
+    document
+        .querySelectorAll(".step")
+        .forEach((element, index) => {
 
-        currentStep--;
+            element.classList.toggle(
+                "active",
+                index === currentStep
+            );
+        });
+}
 
-        renderStep();
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function updateStatus(step) {
+
+    document.getElementById("status").innerHTML = `
+        <strong>Step ${currentStep + 1} / ${history.length}</strong>
+        <br>
+        ${step.description}
+    `;
+}
+
+
+/* =========================================================
+   DYNAMIC RULE PANEL
+========================================================= */
+
+function updateRulePanel(step) {
+
+    const panel = document.getElementById("rulePanel");
+
+    let html = "";
+
+
+    if (step.ruleType === "case1") {
+
+        html = `
+            <div class="rule-title">
+                🔴 Case 1 — Red Uncle
+            </div>
+
+            <div class="rule-label">
+                ACTUAL CASE DETECTED
+            </div>
+
+            <div>
+                Parent and Uncle are RED.
+            </div>
+
+            <div class="rule-action">
+                <strong>Rule Applied:</strong><br>
+                Recolor Parent and Uncle BLACK,
+                then recolor Grandparent RED.
+            </div>
+        `;
     }
+
+
+    else if (step.ruleType === "case2") {
+
+        html = `
+            <div class="rule-title">
+                🔺 Case 2 — Triangle
+            </div>
+
+            <div class="rule-label">
+                ACTUAL CASE DETECTED
+            </div>
+
+            <div>
+                Parent and newly inserted node form
+                a triangle.
+            </div>
+
+            <div class="rule-action">
+                <strong>Rule Applied:</strong><br>
+                Rotate around the Parent to convert
+                the triangle into a line.
+            </div>
+        `;
+    }
+
+
+    else if (step.ruleType === "case3") {
+
+        html = `
+            <div class="rule-title">
+                📏 Case 3 — Line
+            </div>
+
+            <div class="rule-label">
+                ACTUAL CASE DETECTED
+            </div>
+
+            <div>
+                Parent and newly inserted node form
+                a straight line and Uncle is BLACK.
+            </div>
+
+            <div class="rule-action">
+                <strong>Rule Applied:</strong><br>
+                Rotate around the Grandparent and
+                recolor Parent and Grandparent.
+            </div>
+        `;
+    }
+
+
+    else if (step.ruleType === "root") {
+
+        html = `
+            <div class="rule-title">
+                ⚫ Root Rule
+            </div>
+
+            <div class="rule-label">
+                ROOT PROPERTY
+            </div>
+
+            <div>
+                The root of a Red-Black Tree must
+                always be BLACK.
+            </div>
+
+            <div class="rule-action">
+                <strong>Action:</strong><br>
+                Root recolored BLACK.
+            </div>
+        `;
+    }
+
+
+    else if (step.ruleType === "insert") {
+
+        html = `
+            <div class="rule-title">
+                🌱 BST Insertion
+            </div>
+
+            <div class="rule-label">
+                INSERTION STEP
+            </div>
+
+            <div>
+                The new node is inserted according
+                to normal Binary Search Tree rules.
+            </div>
+
+            <div class="rule-action">
+                <strong>Red-Black Rule:</strong><br>
+                Newly inserted nodes start as RED.
+            </div>
+        `;
+    }
+
+
+    else if (step.ruleType === "delete") {
+
+        html = `
+            <div class="rule-title">
+                🗑️ Deletion
+            </div>
+
+            <div class="rule-label">
+                DELETE STEP
+            </div>
+
+            <div>
+                Node deletion is being performed.
+            </div>
+        `;
+    }
+
+
+    else {
+
+        html = `
+            <div class="idle-rule">
+                No Red-Black insertion case is triggered
+                at this step.
+            </div>
+        `;
+    }
+
+
+    panel.innerHTML = html;
 }
 
 
-/* =========================================================
-   PLAY
-========================================================= */
+function showIdleRule() {
 
-function playSteps(){
-
-    if(playing) return;
-
-    playing = true;
-
-    timer = setInterval(()=>{
-
-        if(currentStep < history.length - 1){
-
-            currentStep++;
-
-            renderStep();
-
-        }else{
-
-            pauseSteps();
-        }
-
-    },1000);
-}
-
-
-/* =========================================================
-   PAUSE
-========================================================= */
-
-function pauseSteps(){
-
-    playing = false;
-
-    clearInterval(timer);
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-function resetTree(){
-
-    pauseSteps();
-
-    root = null;
-
-    history = [];
-
-    currentStep = -1;
-
-    document.getElementById("history").innerHTML =
-
-        `<p style="color:#94a3b8">
-            No operations yet.
-        </p>`;
-
-    document.getElementById("status").innerText =
-
-        "Tree reset.";
-
-    drawTree(null);
+    document.getElementById("rulePanel").innerHTML = `
+        <div class="idle-rule">
+            Insert a value and move through the
+            steps to see the exact rule applied.
+        </div>
+    `;
 }
 
 
@@ -1111,66 +1498,70 @@ function resetTree(){
    DRAW TREE
 ========================================================= */
 
-function drawTree(treeRoot){
+function drawTree(treeRoot, highlightValues = []) {
 
-    const svg = document.getElementById("treeSvg");
+    const svg = document.getElementById("treeCanvas");
 
     svg.innerHTML = "";
 
-    if(!treeRoot){
 
-        return;
-    }
+    if (!treeRoot) return;
+
 
     const nodes = [];
 
-    function calculate(node,depth,x){
+    /*
+       Responsive tree coordinates.
+       The viewBox remains fixed, so the SVG scales
+       automatically on phone and laptop.
+    */
 
-        if(!node) return;
+    function calculate(node, depth, left, right) {
 
-        const spacing = Math.max(
-            60,
-            300 / Math.pow(2,depth)
-        );
+        if (!node) return;
+
+        const x = (left + right) / 2;
+
+        const y = 65 + depth * 95;
 
         nodes.push({
-
-            node:node,
-
-            x:x,
-
-            y:80 + depth * 100
-
+            node,
+            x,
+            y
         });
+
 
         calculate(
             node.left,
             depth + 1,
-            x - spacing
+            left,
+            x
         );
+
 
         calculate(
             node.right,
             depth + 1,
-            x + spacing
+            x,
+            right
         );
     }
 
-    calculate(treeRoot,0,500);
+
+    calculate(treeRoot, 0, 50, 950);
+
 
     /* EDGES */
 
-    nodes.forEach(item=>{
+    nodes.forEach(item => {
 
-        const node = item.node;
-
-        if(node.left){
+        if (item.node.left) {
 
             const child = nodes.find(
-                n=>n.node === node.left
+                n => n.node === item.node.left
             );
 
-            drawLine(
+            drawEdge(
                 svg,
                 item.x,
                 item.y,
@@ -1179,13 +1570,14 @@ function drawTree(treeRoot){
             );
         }
 
-        if(node.right){
+
+        if (item.node.right) {
 
             const child = nodes.find(
-                n=>n.node === node.right
+                n => n.node === item.node.right
             );
 
-            drawLine(
+            drawEdge(
                 svg,
                 item.x,
                 item.y,
@@ -1198,7 +1590,7 @@ function drawTree(treeRoot){
 
     /* NODES */
 
-    nodes.forEach(item=>{
+    nodes.forEach(item => {
 
         const group =
             document.createElementNS(
@@ -1206,19 +1598,19 @@ function drawTree(treeRoot){
                 "g"
             );
 
-        group.setAttribute(
-            "class",
-            "node " +
-            (item.node.color === RED
-                ? "red"
-                : "black")
-        );
+
+        const highlighted =
+            highlightValues.includes(
+                item.node.value
+            );
+
 
         const circle =
             document.createElementNS(
                 "http://www.w3.org/2000/svg",
                 "circle"
             );
+
 
         circle.setAttribute(
             "cx",
@@ -1232,7 +1624,21 @@ function drawTree(treeRoot){
 
         circle.setAttribute(
             "r",
-            27
+            26
+        );
+
+
+        circle.setAttribute(
+            "class",
+            `node-circle ${
+                item.node.color === RED
+                    ? "node-red"
+                    : "node-black"
+            } ${
+                highlighted
+                    ? "node-highlight"
+                    : ""
+            }`
         );
 
 
@@ -1241,6 +1647,7 @@ function drawTree(treeRoot){
                 "http://www.w3.org/2000/svg",
                 "text"
             );
+
 
         text.setAttribute(
             "x",
@@ -1252,6 +1659,13 @@ function drawTree(treeRoot){
             item.y
         );
 
+
+        text.setAttribute(
+            "class",
+            "node-text"
+        );
+
+
         text.textContent =
             item.node.value;
 
@@ -1261,17 +1675,15 @@ function drawTree(treeRoot){
         group.appendChild(text);
 
         svg.appendChild(group);
-
     });
-
 }
 
 
 /* =========================================================
-   DRAW LINE
+   EDGE
 ========================================================= */
 
-function drawLine(svg,x1,y1,x2,y2){
+function drawEdge(svg, x1, y1, x2, y2) {
 
     const line =
         document.createElementNS(
@@ -1279,50 +1691,176 @@ function drawLine(svg,x1,y1,x2,y2){
             "line"
         );
 
-    line.setAttribute(
-        "x1",
-        x1
-    );
 
-    line.setAttribute(
-        "y1",
-        y1
-    );
+    line.setAttribute("x1", x1);
 
-    line.setAttribute(
-        "x2",
-        x2
-    );
+    line.setAttribute("y1", y1);
 
-    line.setAttribute(
-        "y2",
-        y2
-    );
+    line.setAttribute("x2", x2);
 
-    line.setAttribute(
-        "class",
-        "edge"
-    );
+    line.setAttribute("y2", y2);
+
+    line.setAttribute("class", "edge");
+
 
     svg.appendChild(line);
 }
 
 
 /* =========================================================
-   KEYBOARD
+   NEXT
+========================================================= */
+
+function nextStep() {
+
+    if (currentStep < history.length - 1) {
+
+        currentStep++;
+
+        renderCurrentStep();
+
+    } else {
+
+        stopPlaying();
+    }
+}
+
+
+/* =========================================================
+   PREVIOUS
+========================================================= */
+
+function previousStep() {
+
+    if (currentStep > 0) {
+
+        currentStep--;
+
+        renderCurrentStep();
+    }
+}
+
+
+/* =========================================================
+   PLAY
+========================================================= */
+
+function playSteps() {
+
+    if (playing || !history.length) return;
+
+    playing = true;
+
+    playTimer = setInterval(() => {
+
+        if (currentStep < history.length - 1) {
+
+            currentStep++;
+
+            renderCurrentStep();
+
+        } else {
+
+            stopPlaying();
+        }
+
+    }, 1100);
+}
+
+
+/* =========================================================
+   PAUSE
+========================================================= */
+
+function stopPlaying() {
+
+    playing = false;
+
+    clearInterval(playTimer);
+
+    playTimer = null;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetTree() {
+
+    stopPlaying();
+
+    root = null;
+
+    history = [];
+
+    currentStep = -1;
+
+    document.getElementById("history").innerHTML = `
+        <div class="history-empty">
+            No operation yet.
+        </div>
+    `;
+
+    document.getElementById("status").innerHTML =
+        "Ready. Enter a number and press Insert.";
+
+    showIdleRule();
+
+    drawTree(null);
+}
+
+
+/* =========================================================
+   BUTTON EVENTS
 ========================================================= */
 
 document
-.getElementById("valueInput")
-.addEventListener("keydown",function(e){
+    .getElementById("insertBtn")
+    .addEventListener("click", insertValue);
 
-    if(e.key === "Enter"){
 
-        insertValue();
+document
+    .getElementById("deleteBtn")
+    .addEventListener("click", deleteValue);
 
-    }
 
-});
+document
+    .getElementById("playBtn")
+    .addEventListener("click", playSteps);
+
+
+document
+    .getElementById("pauseBtn")
+    .addEventListener("click", stopPlaying);
+
+
+document
+    .getElementById("prevBtn")
+    .addEventListener("click", previousStep);
+
+
+document
+    .getElementById("nextBtn")
+    .addEventListener("click", nextStep);
+
+
+document
+    .getElementById("resetBtn")
+    .addEventListener("click", resetTree);
+
+
+/* ENTER KEY */
+
+document
+    .getElementById("valueInput")
+    .addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+
+            insertValue();
+        }
+    });
 
 
 /* INITIAL */
