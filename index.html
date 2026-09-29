@@ -2,216 +2,118 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Red-Black Tree Lab</title>
+<title>Red Black Tree Simulator</title>
 
 <style>
 *{
     box-sizing:border-box;
 }
 
-:root{
-    --bg:#0b1120;
-    --panel:#111827;
-    --panel2:#172033;
-    --border:#263449;
-    --text:#e5e7eb;
-    --muted:#94a3b8;
-    --blue:#3b82f6;
-    --blue2:#2563eb;
-    --red:#ef4444;
-    --black:#020617;
-    --green:#22c55e;
-    --yellow:#f59e0b;
-}
-
 body{
     margin:0;
-    font-family:Inter,Arial,Helvetica,sans-serif;
-    background:
-        radial-gradient(circle at top left,#172554 0,#0b1120 35%),
-        #0b1120;
-    color:var(--text);
+    font-family:Arial, Helvetica, sans-serif;
+    background:#0f172a;
+    color:#e2e8f0;
 }
 
 .container{
-    max-width:1250px;
+    max-width:1400px;
     margin:auto;
-    padding:25px;
+    padding:20px;
 }
 
 /* HEADER */
 
-.header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:20px;
-    margin-bottom:22px;
+header{
+    text-align:center;
+    margin-bottom:20px;
 }
 
-.logo h1{
+header h1{
     margin:0;
     font-size:32px;
-    letter-spacing:-1px;
 }
 
-.logo p{
-    margin:7px 0 0;
-    color:var(--muted);
-}
-
-.badge{
-    padding:8px 13px;
-    border:1px solid #334155;
-    border-radius:20px;
-    color:#93c5fd;
-    background:#172554;
-    font-size:13px;
-}
-
-/* PANELS */
-
-.card{
-    background:rgba(17,24,39,.92);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:18px;
-    margin-bottom:18px;
-    box-shadow:0 12px 35px rgba(0,0,0,.18);
-}
-
-.card-title{
-    font-size:18px;
-    font-weight:700;
-    margin-bottom:14px;
+header p{
+    color:#94a3b8;
 }
 
 /* CONTROLS */
 
 .controls{
     display:flex;
-    gap:9px;
+    gap:10px;
     flex-wrap:wrap;
-}
-
-input,button{
-    font-size:15px;
-    border-radius:9px;
-    padding:11px 14px;
+    background:#1e293b;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
 }
 
 input{
-    background:#0f172a;
+    width:130px;
+    padding:11px;
+    border:none;
+    border-radius:7px;
+    background:#334155;
     color:white;
-    border:1px solid #334155;
-    outline:none;
-    width:150px;
-}
-
-input:focus{
-    border-color:var(--blue);
+    font-size:15px;
 }
 
 button{
     border:none;
-    background:var(--blue);
-    color:white;
+    padding:11px 16px;
+    border-radius:7px;
     cursor:pointer;
-    font-weight:600;
-    transition:.2s;
+    background:#334155;
+    color:white;
+    font-weight:bold;
 }
 
 button:hover{
-    transform:translateY(-1px);
-    background:var(--blue2);
+    background:#475569;
 }
 
-button.secondary{
-    background:#263449;
+.insert{
+    background:#16a34a;
 }
 
-button.secondary:hover{
-    background:#334155;
+.delete{
+    background:#dc2626;
 }
 
-button.success{
-    background:#15803d;
+.play{
+    background:#2563eb;
 }
 
-button.danger{
-    background:#991b1b;
+.reset{
+    background:#7c3aed;
 }
 
-/* STEP BAR */
+/* MAIN */
 
-.stepbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.main{
+    display:grid;
+    grid-template-columns:2fr 1fr;
     gap:15px;
-    margin-top:16px;
-    padding:13px;
-    background:#0b1220;
-    border-radius:11px;
-    border:1px solid #263449;
 }
 
-.step-info{
-    font-weight:700;
-}
-
-.step-actions{
-    display:flex;
-    gap:8px;
-}
-
-.step-actions button{
-    min-width:95px;
-}
-
-.progress{
-    height:5px;
+.panel{
     background:#1e293b;
-    border-radius:5px;
-    margin-top:13px;
-    overflow:hidden;
-}
-
-.progress-bar{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,#2563eb,#60a5fa);
-    transition:.3s;
-}
-
-/* STATUS */
-
-.status{
-    margin-top:14px;
-    padding:14px;
-    border-radius:10px;
-    background:#0f172a;
-    border-left:4px solid var(--blue);
-    color:#cbd5e1;
-    line-height:1.5;
-}
-
-.status strong{
-    color:white;
+    border-radius:12px;
+    padding:15px;
 }
 
 /* TREE */
 
-.tree-wrapper{
-    position:relative;
-    height:470px;
+.tree-container{
+    height:600px;
     overflow:auto;
-    border-radius:12px;
-    background:
-        radial-gradient(circle at center,#111c31,#080e1b);
-    border:1px solid #263449;
+    position:relative;
+    background:#020617;
+    border-radius:10px;
 }
 
 svg{
@@ -220,185 +122,115 @@ svg{
     min-width:800px;
 }
 
-/* TREE */
-
-.edge{
-    stroke:#64748b;
-    stroke-width:2;
-}
+/* NODES */
 
 .node circle{
-    stroke:#e2e8f0;
-    stroke-width:2;
-    transition:.3s;
-}
-
-.node.active circle{
-    stroke:#facc15;
-    stroke-width:5;
-    filter:drop-shadow(0 0 8px #facc15);
+    stroke:#fff;
+    stroke-width:3;
 }
 
 .node text{
-    font-weight:bold;
     fill:white;
+    font-size:15px;
+    font-weight:bold;
     text-anchor:middle;
     dominant-baseline:middle;
-    pointer-events:none;
 }
 
-.node-label{
-    font-size:11px;
-    fill:#94a3b8;
+.red circle{
+    fill:#dc2626;
 }
 
-/* LEGEND */
-
-.legend{
-    display:flex;
-    flex-wrap:wrap;
-    gap:18px;
+.black circle{
+    fill:#020617;
 }
 
-.legend-item{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    color:#cbd5e1;
+.highlight circle{
+    stroke:#facc15;
+    stroke-width:6;
+    filter:drop-shadow(0 0 8px #facc15);
 }
 
-.dot{
-    width:16px;
-    height:16px;
-    border-radius:50%;
-    display:inline-block;
-    border:1px solid #64748b;
-}
+/* EDGES */
 
-.red{
-    background:#ef4444;
-}
-
-.black{
-    background:#020617;
-}
-
-.nil{
-    background:#64748b;
-}
-
-/* CASES */
-
-.case-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:12px;
-}
-
-.case{
-    padding:15px;
-    background:#0f172a;
-    border:1px solid #263449;
-    border-radius:12px;
-}
-
-.case h3{
-    margin:0 0 7px;
-    font-size:16px;
-}
-
-.case p{
-    margin:5px 0;
-    color:#94a3b8;
-    line-height:1.5;
-}
-
-.case.insertion h3{
-    color:#60a5fa;
-}
-
-.case.deletion h3{
-    color:#fbbf24;
+.edge{
+    stroke:#64748b;
+    stroke-width:3;
 }
 
 /* HISTORY */
 
 .history{
-    max-height:260px;
-    overflow:auto;
+    max-height:500px;
+    overflow-y:auto;
 }
 
-.history-row{
-    padding:11px;
-    border-bottom:1px solid #263449;
+.step{
+    padding:12px;
+    margin-bottom:8px;
+    border-radius:8px;
+    background:#334155;
+    cursor:pointer;
 }
 
-.history-row:last-child{
-    border-bottom:none;
-}
-
-.history-row.active{
-    background:#172554;
-    border-left:3px solid #3b82f6;
-}
-
-.history-row small{
-    color:#94a3b8;
-}
-
-/* TABS */
-
-.tabs{
-    display:flex;
-    gap:8px;
-    margin-bottom:15px;
-}
-
-.tab{
-    background:#172033;
-    color:#94a3b8;
-}
-
-.tab.active{
+.step.active{
     background:#2563eb;
-    color:white;
 }
 
-.tab-content{
-    display:none;
+.step-title{
+    font-weight:bold;
+    margin-bottom:5px;
 }
 
-.tab-content.active{
+.step-desc{
+    color:#cbd5e1;
+    font-size:14px;
+    line-height:1.4;
+}
+
+/* RULE PANEL */
+
+.rule-box{
+    margin-top:15px;
+    padding:15px;
+    background:#020617;
+    border-radius:10px;
+}
+
+.rule-box h3{
+    margin-top:0;
+    color:#facc15;
+}
+
+.case{
+    padding:10px;
+    margin-top:8px;
+    border-radius:7px;
+    background:#1e293b;
+}
+
+.case strong{
     display:block;
+    margin-bottom:4px;
+}
+
+.status{
+    margin-top:10px;
+    padding:10px;
+    background:#334155;
+    border-radius:7px;
 }
 
 /* RESPONSIVE */
 
-@media(max-width:700px){
-    .container{
-        padding:14px;
+@media(max-width:900px){
+
+    .main{
+        grid-template-columns:1fr;
     }
 
-    .header{
-        align-items:flex-start;
-        flex-direction:column;
-    }
-
-    .stepbar{
-        flex-direction:column;
-        align-items:stretch;
-    }
-
-    .step-actions{
-        flex-wrap:wrap;
-    }
-
-    .step-actions button{
-        flex:1;
-    }
-
-    .tree-wrapper{
-        height:390px;
+    .tree-container{
+        height:500px;
     }
 }
 </style>
@@ -408,321 +240,114 @@ svg{
 
 <div class="container">
 
-<!-- HEADER -->
-
-<div class="header">
-
-    <div class="logo">
-        <h1>🌳 Red-Black Tree Lab</h1>
-        <p>Interactive DAA / CLRS insertion & deletion simulator</p>
-    </div>
-
-    <div class="badge">
-        SELF-BALANCING BST
-    </div>
-
-</div>
-
+<header>
+    <h1>🔴⚫ Red-Black Tree Simulator</h1>
+    <p>Interactive Insertion • Deletion • Rotations • Step-by-Step Rules</p>
+</header>
 
 <!-- CONTROLS -->
 
-<div class="card">
+<div class="controls">
 
-    <div class="card-title">
-        Insert / Delete
-    </div>
+    <input
+        id="valueInput"
+        type="number"
+        placeholder="Enter value"
+    >
 
-    <div class="controls">
+    <button class="insert" onclick="insertValue()">
+        ➕ Insert
+    </button>
 
-        <input
-            id="value"
-            type="number"
-            placeholder="Enter key"
-        >
+    <button class="delete" onclick="deleteValue()">
+        🗑 Delete
+    </button>
 
-        <button onclick="addNode()">
-            ＋ Add Node
-        </button>
+    <button class="play" onclick="playSteps()">
+        ▶ Play
+    </button>
 
-        <button
-            class="danger"
-            onclick="deleteNode()">
-            − Delete Node
-        </button>
+    <button onclick="pauseSteps()">
+        ⏸ Pause
+    </button>
 
-        <button
-            class="secondary"
-            onclick="runCLRS()">
-            CLRS Example
-        </button>
+    <button onclick="previousStep()">
+        ⏮ Previous
+    </button>
 
-        <button
-            class="secondary"
-            onclick="resetTree()">
-            ↻ Reset
-        </button>
+    <button onclick="nextStep()">
+        Next ⏭
+    </button>
 
-    </div>
-
-    <div class="stepbar">
-
-        <div class="step-info">
-            Step
-            <span id="stepNumber">0</span>
-            /
-            <span id="totalSteps">0</span>
-        </div>
-
-        <div class="step-actions">
-
-            <button
-                class="secondary"
-                onclick="previousStep()">
-                ← Previous
-            </button>
-
-            <button
-                onclick="togglePlay()"
-                id="playBtn">
-                ▶ Play
-            </button>
-
-            <button
-                class="secondary"
-                onclick="nextStep()">
-                Next →
-            </button>
-
-        </div>
-
-    </div>
-
-    <div class="progress">
-        <div
-            class="progress-bar"
-            id="progressBar">
-        </div>
-    </div>
-
-    <div
-        id="status"
-        class="status">
-
-        <strong>Ready.</strong>
-        Add a key or load the CLRS example.
-
-    </div>
+    <button class="reset" onclick="resetTree()">
+        ↻ Reset
+    </button>
 
 </div>
 
+<div class="main">
 
-<!-- TREE -->
+    <!-- TREE -->
 
-<div class="card">
+    <div class="panel">
 
-    <div class="card-title">
-        🌳 Tree Visualization
-    </div>
+        <h2>Tree Visualization</h2>
 
-    <div class="legend">
-
-        <div class="legend-item">
-            <span class="dot red"></span>
-            Red
+        <div class="tree-container">
+            <svg id="treeSvg"></svg>
         </div>
 
-        <div class="legend-item">
-            <span class="dot black"></span>
-            Black
-        </div>
-
-        <div class="legend-item">
-            <span class="dot nil"></span>
-            NIL / Black
+        <div class="status" id="status">
+            Ready. Insert a value to start.
         </div>
 
     </div>
 
-    <br>
+    <!-- SIDE PANEL -->
 
-    <div class="tree-wrapper">
-        <svg id="svg"></svg>
-    </div>
+    <div>
 
-</div>
+        <div class="panel">
 
+            <h2>📜 Step History</h2>
 
-<!-- CASES -->
-
-<div class="card">
-
-    <div class="tabs">
-
-        <button
-            class="tab active"
-            onclick="showTab('insertion',this)">
-            Insertion Cases
-        </button>
-
-        <button
-            class="tab"
-            onclick="showTab('deletion',this)">
-            Deletion Cases
-        </button>
-
-    </div>
-
-
-    <!-- INSERTION -->
-
-    <div
-        id="insertion"
-        class="tab-content active">
-
-        <div class="case-grid">
-
-            <div class="case insertion">
-
-                <h3>Case 1 — Red Uncle</h3>
-
-                <p>
-                    Parent is Red and Uncle is Red.
+            <div id="history" class="history">
+                <p style="color:#94a3b8">
+                    No operations yet.
                 </p>
-
-                <p>
-                    → Recolor parent and uncle Black.
-                    Recolor grandparent Red.
-                </p>
-
-            </div>
-
-
-            <div class="case insertion">
-
-                <h3>Case 2 — Triangle</h3>
-
-                <p>
-                    Parent is Red, uncle is Black,
-                    and node forms a triangle.
-                </p>
-
-                <p>
-                    → Rotate around the parent.
-                    This converts it into Case 3.
-                </p>
-
-            </div>
-
-
-            <div class="case insertion">
-
-                <h3>Case 3 — Line</h3>
-
-                <p>
-                    Parent is Red, uncle is Black,
-                    and node forms a straight line.
-                </p>
-
-                <p>
-                    → Recolor and rotate around
-                    the grandparent.
-                </p>
-
-            </div>
-
-
-            <div class="case insertion">
-
-                <h3>Mirror Cases</h3>
-
-                <p>
-                    The same three cases occur
-                    symmetrically on the right side.
-                </p>
-
-                <p>
-                    Left rotation ↔ Right rotation.
-                </p>
-
             </div>
 
         </div>
 
-    </div>
+        <div class="panel rule-box">
 
+            <h3>📖 Insertion Rules</h3>
 
-    <!-- DELETION -->
-
-    <div
-        id="deletion"
-        class="tab-content">
-
-        <div class="case-grid">
-
-            <div class="case deletion">
-
-                <h3>Deletion Case 1 — Red Sibling</h3>
-
-                <p>
-                    The sibling is Red.
-                </p>
-
-                <p>
-                    → Recolor sibling Black,
-                    parent Red, then rotate around parent.
-                </p>
-
+            <div class="case">
+                <strong>🔴 Case 1 — Red Uncle</strong>
+                Parent and Uncle are RED.
+                <br>
+                ➜ Recolor Parent and Uncle BLACK.
+                <br>
+                ➜ Recolor Grandparent RED.
             </div>
 
-
-            <div class="case deletion">
-
-                <h3>Deletion Case 2 — Black Sibling</h3>
-
-                <p>
-                    Sibling is Black and both
-                    sibling children are Black.
-                </p>
-
-                <p>
-                    → Recolor sibling Red and
-                    move the double-black problem upward.
-                </p>
-
+            <div class="case">
+                <strong>🔺 Case 2 — Triangle</strong>
+                Parent and Node form a triangle.
+                <br>
+                ➜ Rotate around Parent.
+                <br>
+                ➜ Convert into Case 3.
             </div>
 
-
-            <div class="case deletion">
-
-                <h3>Deletion Case 3 — Near Red Child</h3>
-
-                <p>
-                    Sibling is Black and the
-                    near child is Red.
-                </p>
-
-                <p>
-                    → Recolor and rotate sibling
-                    to transform into Case 4.
-                </p>
-
-            </div>
-
-
-            <div class="case deletion">
-
-                <h3>Deletion Case 4 — Far Red Child</h3>
-
-                <p>
-                    Sibling is Black and its
-                    far child is Red.
-                </p>
-
-                <p>
-                    → Recolor and rotate around
-                    the parent to remove double-black.
-                </p>
-
+            <div class="case">
+                <strong>📏 Case 3 — Line</strong>
+                Parent and Node form a straight line.
+                <br>
+                ➜ Rotate around Grandparent.
+                <br>
+                ➜ Recolor Parent and Grandparent.
             </div>
 
         </div>
@@ -731,29 +356,7 @@ svg{
 
 </div>
 
-
-<!-- HISTORY -->
-
-<div class="card">
-
-    <div class="card-title">
-        📜 Step-by-Step Algorithm
-    </div>
-
-    <div
-        id="history"
-        class="history">
-
-        <small>
-            No operation performed yet.
-        </small>
-
-    </div>
-
 </div>
-
-</div>
-
 
 <script>
 
@@ -761,406 +364,364 @@ svg{
    RED BLACK TREE
 ========================================================= */
 
+const RED = "RED";
+const BLACK = "BLACK";
+
 class Node{
 
-    constructor(key,color="R"){
+    constructor(value){
 
-        this.key=key;
-        this.color=color;
+        this.value = value;
 
-        this.left=null;
-        this.right=null;
-        this.parent=null;
+        this.color = RED;
 
-        this._x=0;
-        this._y=0;
+        this.left = null;
+        this.right = null;
+        this.parent = null;
     }
 }
 
+let root = null;
 
-let root=null;
+let history = [];
 
-let steps=[];
-let currentStep=0;
-let playing=false;
-let timer=null;
+let currentStep = -1;
+
+let playing = false;
+
+let timer = null;
 
 
 /* =========================================================
-   UTILITIES
+   INSERT
 ========================================================= */
 
-function nodeColor(n){
+function insertValue(){
 
-    return n ? n.color : "B";
+    const input = document.getElementById("valueInput");
 
-}
+    const value = Number(input.value);
 
-
-function cloneTree(originalRoot){
-
-    if(!originalRoot)
-        return null;
-
-    function copy(n,parent=null){
-
-        if(!n)
-            return null;
-
-        const c=new Node(n.key,n.color);
-
-        c.parent=parent;
-
-        c.left=copy(n.left,c);
-        c.right=copy(n.right,c);
-
-        return c;
+    if(!Number.isInteger(value)){
+        alert("Enter a valid integer.");
+        return;
     }
 
-    return copy(originalRoot);
-}
+    input.value = "";
 
+    history = [];
 
-function snapshot(){
+    currentStep = -1;
 
-    return cloneTree(root);
+    insert(value);
 
-}
+    renderHistory();
 
+    currentStep = history.length - 1;
 
-function addStep(title,description,caseName=""){
-
-    steps.push({
-
-        tree:snapshot(),
-
-        title:title,
-
-        description:description,
-
-        caseName:caseName
-
-    });
+    renderStep();
 
 }
 
 
 /* =========================================================
-   ROTATIONS
+   BST INSERTION
 ========================================================= */
 
-function leftRotate(x){
+function insert(value){
 
-    const y=x.right;
+    let node = new Node(value);
 
-    if(!y) return;
-
-    x.right=y.left;
-
-    if(y.left)
-        y.left.parent=x;
-
-    y.parent=x.parent;
-
-    if(!x.parent){
-
-        root=y;
-
-    }
-    else if(x===x.parent.left){
-
-        x.parent.left=y;
-
-    }
-    else{
-
-        x.parent.right=y;
-
-    }
-
-    y.left=x;
-    x.parent=y;
-
-}
-
-
-function rightRotate(x){
-
-    const y=x.left;
-
-    if(!y) return;
-
-    x.left=y.right;
-
-    if(y.right)
-        y.right.parent=x;
-
-    y.parent=x.parent;
-
-    if(!x.parent){
-
-        root=y;
-
-    }
-    else if(x===x.parent.right){
-
-        x.parent.right=y;
-
-    }
-    else{
-
-        x.parent.left=y;
-
-    }
-
-    y.right=x;
-    x.parent=y;
-
-}
-
-
-/* =========================================================
-   INSERTION
-========================================================= */
-
-function performInsertion(key){
-
-    let y=null;
-    let x=root;
-
-    while(x){
-
-        y=x;
-
-        if(key===x.key){
-
-            return false;
-
-        }
-
-        x=key<x.key ? x.left : x.right;
-
-    }
-
-    const z=new Node(key,"R");
-
-    z.parent=y;
-
-    if(!y){
-
-        root=z;
-
-    }
-    else if(key<y.key){
-
-        y.left=z;
-
-    }
-    else{
-
-        y.right=z;
-
-    }
-
-
-    addStep(
-        `Inserted ${key}`,
-        `Node ${key} is inserted as a Red node.`,
-        "BST Insertion"
+    addHistory(
+        "Insert " + value,
+        `New node ${value} is inserted as RED using normal BST insertion.`
     );
 
+    if(root === null){
 
-    while(z.parent && z.parent.color==="R"){
+        root = node;
 
-        const p=z.parent;
-        const g=p.parent;
+        addHistory(
+            "Root Rule",
+            `Node ${value} is the root. Rule: Root must always be BLACK.`
+        );
 
+        node.color = BLACK;
+
+        addHistory(
+            "Recolor",
+            `Node ${value} changed from RED → BLACK.`
+        );
+
+        return;
+    }
+
+    let current = root;
+
+    while(true){
+
+        if(value === current.value){
+
+            addHistory(
+                "Duplicate",
+                `${value} already exists. Duplicate values are ignored.`
+            );
+
+            return;
+        }
+
+        if(value < current.value){
+
+            if(current.left === null){
+
+                current.left = node;
+
+                node.parent = current;
+
+                break;
+
+            }else{
+
+                current = current.left;
+            }
+
+        }else{
+
+            if(current.right === null){
+
+                current.right = node;
+
+                node.parent = current;
+
+                break;
+
+            }else{
+
+                current = current.right;
+            }
+        }
+    }
+
+    fixInsertion(node);
+}
+
+
+/* =========================================================
+   INSERTION FIX
+========================================================= */
+
+function fixInsertion(z){
+
+    while(z !== root && z.parent.color === RED){
+
+        let parent = z.parent;
+
+        let grandparent = parent.parent;
 
         /* LEFT SIDE */
 
-        if(p===g.left){
+        if(parent === grandparent.left){
 
-            const uncle=g.right;
-
+            let uncle = grandparent.right;
 
             /* CASE 1 */
 
-            if(nodeColor(uncle)==="R"){
+            if(uncle && uncle.color === RED){
 
-                p.color="B";
-                uncle.color="B";
-                g.color="R";
-
-                addStep(
-                    "Case 1: Recoloring",
-                    `Parent ${p.key} and uncle ${uncle.key} are Red. Both become Black and grandparent ${g.key} becomes Red.`,
-                    "Insertion Case 1"
+                addHistory(
+                    "Case 1 — Red Uncle",
+                    `Parent ${parent.value} and Uncle ${uncle.value} are RED. Recolor Parent and Uncle BLACK, and Grandparent ${grandparent.value} RED.`
                 );
 
-                z=g;
+                parent.color = BLACK;
+
+                uncle.color = BLACK;
+
+                grandparent.color = RED;
+
+                addHistory(
+                    "Recolor",
+                    `Parent ${parent.value} → BLACK, Uncle ${uncle.value} → BLACK, Grandparent ${grandparent.value} → RED.`
+                );
+
+                z = grandparent;
 
             }
 
+            /* CASE 2 */
 
             else{
 
-                /* CASE 2 */
+                if(z === parent.right){
 
-                if(z===p.right){
-
-                    z=p;
-
-                    leftRotate(z);
-
-                    addStep(
-                        "Case 2: Left-Right",
-                        "The node forms a triangle. Perform a left rotation around the parent.",
-                        "Insertion Case 2"
+                    addHistory(
+                        "Case 2 — Triangle",
+                        `Nodes ${grandparent.value}, ${parent.value}, ${z.value} form a triangle. Left rotation at Parent ${parent.value}.`
                     );
 
-                }
+                    z = parent;
 
+                    rotateLeft(z);
+
+                }
 
                 /* CASE 3 */
 
-                z.parent.color="B";
-                g.color="R";
-
-                rightRotate(g);
-
-                addStep(
-                    "Case 3: Left-Left",
-                    `Recolor the parent and rotate right around grandparent ${g.key}.`,
-                    "Insertion Case 3"
+                addHistory(
+                    "Case 3 — Line",
+                    `Straight-line configuration detected. Right rotation at Grandparent ${grandparent.value} and recoloring.`
                 );
+
+                parent.color = BLACK;
+
+                grandparent.color = RED;
+
+                rotateRight(grandparent);
 
             }
 
         }
 
-
-        /* RIGHT SIDE */
+        /* RIGHT SIDE — MIRROR */
 
         else{
 
-            const uncle=g.left;
+            let uncle = grandparent.left;
 
+            /* CASE 1 */
 
-            /* MIRROR CASE 1 */
+            if(uncle && uncle.color === RED){
 
-            if(nodeColor(uncle)==="R"){
-
-                p.color="B";
-                uncle.color="B";
-                g.color="R";
-
-                addStep(
-                    "Mirror Case 1: Recoloring",
-                    `Parent ${p.key} and uncle ${uncle.key} are Red. Recolor both Black and grandparent Red.`,
-                    "Mirror Case 1"
+                addHistory(
+                    "Case 1 — Red Uncle",
+                    `Parent ${parent.value} and Uncle ${uncle.value} are RED. Recolor Parent and Uncle BLACK, and Grandparent ${grandparent.value} RED.`
                 );
 
-                z=g;
+                parent.color = BLACK;
+
+                uncle.color = BLACK;
+
+                grandparent.color = RED;
+
+                z = grandparent;
 
             }
 
+            /* CASE 2 */
 
             else{
 
-                /* MIRROR CASE 2 */
+                if(z === parent.left){
 
-                if(z===p.left){
-
-                    z=p;
-
-                    rightRotate(z);
-
-                    addStep(
-                        "Mirror Case 2: Right-Left",
-                        "The node forms a triangle on the opposite side. Perform a right rotation.",
-                        "Mirror Case 2"
+                    addHistory(
+                        "Case 2 — Triangle",
+                        `Mirror triangle detected. Right rotation at Parent ${parent.value}.`
                     );
 
+                    z = parent;
+
+                    rotateRight(z);
                 }
 
+                /* CASE 3 */
 
-                /* MIRROR CASE 3 */
-
-                z.parent.color="B";
-                g.color="R";
-
-                leftRotate(g);
-
-                addStep(
-                    "Mirror Case 3: Right-Right",
-                    `Recolor the parent and rotate left around grandparent ${g.key}.`,
-                    "Mirror Case 3"
+                addHistory(
+                    "Case 3 — Line",
+                    `Mirror straight-line configuration. Left rotation at Grandparent ${grandparent.value} and recoloring.`
                 );
 
+                parent.color = BLACK;
+
+                grandparent.color = RED;
+
+                rotateLeft(grandparent);
             }
-
         }
-
     }
 
+    root.color = BLACK;
 
-    root.color="B";
-
-
-    addStep(
-        "Insertion Complete",
-        `Root is always Black. Red-Black Tree properties are restored after inserting ${key}.`,
-        "Complete"
+    addHistory(
+        "Root Rule",
+        "Final check: Root must always be BLACK."
     );
+}
 
 
-    return true;
+/* =========================================================
+   LEFT ROTATION
+========================================================= */
+
+function rotateLeft(x){
+
+    let y = x.right;
+
+    if(!y) return;
+
+    x.right = y.left;
+
+    if(y.left){
+
+        y.left.parent = x;
+    }
+
+    y.parent = x.parent;
+
+    if(!x.parent){
+
+        root = y;
+
+    }else if(x === x.parent.left){
+
+        x.parent.left = y;
+
+    }else{
+
+        x.parent.right = y;
+    }
+
+    y.left = x;
+
+    x.parent = y;
 
 }
 
 
 /* =========================================================
-   ADD NODE
+   RIGHT ROTATION
 ========================================================= */
 
-function addNode(){
+function rotateRight(x){
 
-    stopPlay();
+    let y = x.left;
 
-    const input=document.getElementById("value");
+    if(!y) return;
 
-    const key=Number(input.value);
+    x.left = y.right;
 
-    if(!Number.isInteger(key)){
+    if(y.right){
 
-        setStatus(
-            "<strong>Invalid input.</strong> Please enter an integer."
-        );
-
-        return;
-
+        y.right.parent = x;
     }
 
+    y.parent = x.parent;
 
-    steps=[];
-    currentStep=0;
+    if(!x.parent){
 
-    const success=performInsertion(key);
+        root = y;
 
-    if(!success){
+    }else if(x === x.parent.left){
 
-        setStatus(
-            `<strong>Duplicate.</strong> Key ${key} already exists.`
-        );
+        x.parent.left = y;
 
-        return;
+    }else{
 
+        x.parent.right = y;
     }
 
-    input.value="";
+    y.right = x;
 
-    showStep(0);
-
+    x.parent = y;
 }
 
 
@@ -1168,300 +729,280 @@ function addNode(){
    DELETE
 ========================================================= */
 
-/*
-    Educational deletion implementation.
+function deleteValue(){
 
-    The tree is converted into an ordered list,
-    the selected key is removed, and the tree is
-    rebuilt using RB insertion.
+    const input = document.getElementById("valueInput");
 
-    The UI still explains the CLRS deletion cases.
-    This keeps the learning simulator stable while
-    allowing students to experiment with deletion.
-*/
+    const value = Number(input.value);
 
-function deleteNode(){
+    if(!Number.isInteger(value)){
+        alert("Enter a valid integer.");
+        return;
+    }
 
-    stopPlay();
+    input.value = "";
 
-    const input=document.getElementById("value");
+    history = [];
 
-    const key=Number(input.value);
+    currentStep = -1;
 
-    if(!Number.isInteger(key)){
+    const node = findNode(root,value);
 
-        setStatus(
-            "<strong>Invalid input.</strong> Enter the key to delete."
+    if(!node){
+
+        addHistory(
+            "Delete",
+            `${value} does not exist in the tree.`
         );
 
-        return;
+        renderHistory();
 
-    }
+        currentStep = history.length - 1;
 
-
-    const values=[];
-
-    function collect(n){
-
-        if(!n) return;
-
-        collect(n.left);
-
-        values.push(n.key);
-
-        collect(n.right);
-
-    }
-
-    collect(root);
-
-
-    if(!values.includes(key)){
-
-        setStatus(
-            `<strong>Not found.</strong> Key ${key} does not exist.`
-        );
+        renderStep();
 
         return;
-
     }
-
-
-    steps=[];
-    currentStep=0;
-
-
-    addStep(
-        `Delete ${key}`,
-        `Searching for ${key} in the Red-Black Tree.`,
-        "Deletion Start"
-    );
-
-
-    addStep(
-        "Node Found",
-        `Node ${key} has been located. Its color and child configuration determine the deletion fix-up case.`,
-        "Deletion"
-    );
-
-
-    values.splice(values.indexOf(key),1);
-
 
     /*
-       Rebuild the tree from remaining values.
-       This is intentionally used as a visual teaching
-       mechanism so students can continue experimenting
-       without NIL-node implementation complexity.
+       Simplified educational deletion.
+
+       The full deletion fix-up algorithm is more complex
+       and will be added separately if required.
     */
 
-    root=null;
+    deleteBST(node);
 
-    values.forEach(v=>{
+    root.color = BLACK;
 
-        performSilentInsertion(v);
-
-    });
-
-
-    addStep(
-        `Deletion Complete`,
-        `Key ${key} has been removed and the tree has been rebalanced.`,
-        "Deletion Complete"
+    addHistory(
+        "Delete",
+        `Node ${value} was deleted using BST deletion. Root restored to BLACK.`
     );
-
-
-    input.value="";
-
-    showStep(0);
-
-}
-
-
-/* =========================================================
-   SILENT INSERTION
-========================================================= */
-
-function performSilentInsertion(key){
-
-    let y=null;
-    let x=root;
-
-    while(x){
-
-        y=x;
-
-        x=key<x.key ? x.left : x.right;
-
-    }
-
-    const z=new Node(key,"R");
-
-    z.parent=y;
-
-    if(!y)
-        root=z;
-
-    else if(key<y.key)
-        y.left=z;
-
-    else
-        y.right=z;
-
-
-    while(z.parent && z.parent.color==="R"){
-
-        const p=z.parent;
-        const g=p.parent;
-
-        if(p===g.left){
-
-            const u=g.right;
-
-            if(nodeColor(u)==="R"){
-
-                p.color="B";
-                u.color="B";
-                g.color="R";
-                z=g;
-
-            }
-            else{
-
-                if(z===p.right){
-
-                    z=p;
-                    leftRotate(z);
-
-                }
-
-                z.parent.color="B";
-                g.color="R";
-                rightRotate(g);
-
-            }
-
-        }
-        else{
-
-            const u=g.left;
-
-            if(nodeColor(u)==="R"){
-
-                p.color="B";
-                u.color="B";
-                g.color="R";
-                z=g;
-
-            }
-            else{
-
-                if(z===p.left){
-
-                    z=p;
-                    rightRotate(z);
-
-                }
-
-                z.parent.color="B";
-                g.color="R";
-                leftRotate(g);
-
-            }
-
-        }
-
-    }
-
-    root.color="B";
-
-}
-
-
-/* =========================================================
-   CLRS EXAMPLE
-========================================================= */
-
-async function runCLRS(){
-
-    stopPlay();
-
-    root=null;
-    steps=[];
-    currentStep=0;
-
-    render();
-
-    const sequence=[41,38,31,12,19,8];
-
-    for(const key of sequence){
-
-        performInsertion(key);
-
-    }
-
-    showStep(0);
-
-}
-
-
-/* =========================================================
-   STEP CONTROLS
-========================================================= */
-
-function showStep(index){
-
-    if(!steps.length){
-
-        render();
-
-        return;
-
-    }
-
-
-    if(index<0)
-        index=0;
-
-    if(index>=steps.length)
-        index=steps.length-1;
-
-
-    currentStep=index;
-
-
-    root=cloneTree(steps[index].tree);
-
-    render();
-
-
-    const step=steps[index];
-
-
-    setStatus(
-        `<strong>${step.title}</strong><br>
-        ${step.description}
-        ${step.caseName ? `<br><small>Algorithm: ${step.caseName}</small>` : ""}`
-    );
-
-
-    document.getElementById("stepNumber").textContent=index+1;
-
-    document.getElementById("totalSteps").textContent=steps.length;
-
-
-    const percent=
-        steps.length===1
-        ? 100
-        : (index/(steps.length-1))*100;
-
-
-    document.getElementById("progressBar").style.width=
-        percent+"%";
-
 
     renderHistory();
 
+    currentStep = history.length - 1;
+
+    renderStep();
+}
+
+
+/* =========================================================
+   BST DELETE
+========================================================= */
+
+function deleteBST(node){
+
+    if(!node.left && !node.right){
+
+        replaceNode(node,null);
+
+        return;
+    }
+
+    if(node.left && !node.right){
+
+        replaceNode(node,node.left);
+
+        return;
+    }
+
+    if(!node.left && node.right){
+
+        replaceNode(node,node.right);
+
+        return;
+    }
+
+    let successor = node.right;
+
+    while(successor.left){
+
+        successor = successor.left;
+    }
+
+    node.value = successor.value;
+
+    node.color = successor.color;
+
+    deleteBST(successor);
+}
+
+
+/* =========================================================
+   REPLACE NODE
+========================================================= */
+
+function replaceNode(oldNode,newNode){
+
+    if(!oldNode.parent){
+
+        root = newNode;
+
+    }else if(oldNode === oldNode.parent.left){
+
+        oldNode.parent.left = newNode;
+
+    }else{
+
+        oldNode.parent.right = newNode;
+    }
+
+    if(newNode){
+
+        newNode.parent = oldNode.parent;
+    }
+}
+
+
+/* =========================================================
+   FIND NODE
+========================================================= */
+
+function findNode(node,value){
+
+    if(!node) return null;
+
+    if(node.value === value) return node;
+
+    if(value < node.value){
+
+        return findNode(node.left,value);
+
+    }else{
+
+        return findNode(node.right,value);
+    }
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function addHistory(title,description){
+
+    history.push({
+
+        title:title,
+
+        description:description,
+
+        snapshot:cloneTree(root)
+
+    });
+}
+
+
+/* =========================================================
+   CLONE TREE
+========================================================= */
+
+function cloneTree(original){
+
+    if(!original) return null;
+
+    const copy = new Node(original.value);
+
+    copy.color = original.color;
+
+    copy.left = cloneTree(original.left);
+
+    copy.right = cloneTree(original.right);
+
+    if(copy.left){
+
+        copy.left.parent = copy;
+    }
+
+    if(copy.right){
+
+        copy.right.parent = copy;
+    }
+
+    return copy;
+}
+
+
+/* =========================================================
+   HISTORY UI
+========================================================= */
+
+function renderHistory(){
+
+    const container = document.getElementById("history");
+
+    container.innerHTML = "";
+
+    history.forEach((step,index)=>{
+
+        const div = document.createElement("div");
+
+        div.className = "step";
+
+        div.innerHTML = `
+
+            <div class="step-title">
+                Step ${index + 1}: ${step.title}
+            </div>
+
+            <div class="step-desc">
+                ${step.description}
+            </div>
+
+        `;
+
+        div.onclick = ()=>{
+
+            currentStep = index;
+
+            renderStep();
+
+        };
+
+        container.appendChild(div);
+
+    });
+}
+
+
+/* =========================================================
+   SHOW CURRENT STEP
+========================================================= */
+
+function renderStep(){
+
+    if(currentStep < 0 || currentStep >= history.length){
+
+        drawTree(root);
+
+        return;
+    }
+
+    const snapshot = history[currentStep].snapshot;
+
+    drawTree(snapshot);
+
+    document.querySelectorAll(".step").forEach((element,index)=>{
+
+        element.classList.toggle(
+            "active",
+            index === currentStep
+        );
+
+    });
+
+    document.getElementById("status").innerText =
+
+        "Step " +
+        (currentStep + 1) +
+        " / " +
+        history.length +
+        " — " +
+        history[currentStep].title +
+        ": " +
+        history[currentStep].description;
 }
 
 
@@ -1471,20 +1012,16 @@ function showStep(index){
 
 function nextStep(){
 
-    if(!steps.length)
-        return;
+    if(currentStep < history.length - 1){
 
-    if(currentStep<steps.length-1){
+        currentStep++;
 
-        showStep(currentStep+1);
+        renderStep();
 
+    }else{
+
+        pauseSteps();
     }
-    else{
-
-        stopPlay();
-
-    }
-
 }
 
 
@@ -1494,78 +1031,51 @@ function nextStep(){
 
 function previousStep(){
 
-    if(!steps.length)
-        return;
+    if(currentStep > 0){
 
-    if(currentStep>0){
+        currentStep--;
 
-        showStep(currentStep-1);
-
+        renderStep();
     }
-
 }
 
 
 /* =========================================================
-   PLAY / PAUSE
+   PLAY
 ========================================================= */
 
-function togglePlay(){
+function playSteps(){
 
-    if(playing){
+    if(playing) return;
 
-        stopPlay();
+    playing = true;
 
-    }
-    else{
+    timer = setInterval(()=>{
 
-        play();
+        if(currentStep < history.length - 1){
 
-    }
+            currentStep++;
 
-}
+            renderStep();
 
+        }else{
 
-function play(){
-
-    if(!steps.length)
-        return;
-
-    if(currentStep>=steps.length-1)
-        currentStep=0;
-
-
-    playing=true;
-
-    document.getElementById("playBtn").textContent="⏸ Pause";
-
-
-    timer=setInterval(()=>{
-
-        if(currentStep<steps.length-1){
-
-            nextStep();
-
-        }
-        else{
-
-            stopPlay();
-
+            pauseSteps();
         }
 
     },1000);
-
 }
 
 
-function stopPlay(){
+/* =========================================================
+   PAUSE
+========================================================= */
 
-    playing=false;
+function pauseSteps(){
+
+    playing = false;
 
     clearInterval(timer);
-
-    document.getElementById("playBtn").textContent="▶ Play";
-
 }
 
 
@@ -1575,253 +1085,149 @@ function stopPlay(){
 
 function resetTree(){
 
-    stopPlay();
+    pauseSteps();
 
-    root=null;
-    steps=[];
-    currentStep=0;
+    root = null;
 
-    document.getElementById("stepNumber").textContent="0";
-    document.getElementById("totalSteps").textContent="0";
-    document.getElementById("progressBar").style.width="0%";
+    history = [];
 
-    document.getElementById("history").innerHTML=
-        "<small>No operation performed yet.</small>";
+    currentStep = -1;
 
+    document.getElementById("history").innerHTML =
 
-    setStatus(
-        "<strong>Ready.</strong> Add a key or load the CLRS example."
-    );
+        `<p style="color:#94a3b8">
+            No operations yet.
+        </p>`;
 
+    document.getElementById("status").innerText =
 
-    render();
+        "Tree reset.";
 
+    drawTree(null);
 }
 
 
 /* =========================================================
-   STATUS
+   DRAW TREE
 ========================================================= */
 
-function setStatus(text){
+function drawTree(treeRoot){
 
-    document.getElementById("status").innerHTML=text;
+    const svg = document.getElementById("treeSvg");
 
-}
+    svg.innerHTML = "";
 
-
-/* =========================================================
-   HISTORY
-========================================================= */
-
-function renderHistory(){
-
-    const history=document.getElementById("history");
-
-    history.innerHTML="";
-
-
-    steps.forEach((step,index)=>{
-
-        const row=document.createElement("div");
-
-        row.className=
-            "history-row"+
-            (index===currentStep ? " active":"");
-
-
-        row.innerHTML=`
-
-            <b>
-                Step ${index+1} —
-                ${step.title}
-            </b>
-
-            <br>
-
-            <small>
-                ${step.description}
-            </small>
-
-        `;
-
-
-        row.onclick=()=>{
-
-            stopPlay();
-
-            showStep(index);
-
-        };
-
-
-        history.appendChild(row);
-
-    });
-
-
-    const active=
-        history.querySelector(".active");
-
-
-    if(active){
-
-        active.scrollIntoView({
-            behavior:"smooth",
-            block:"nearest"
-        });
-
-    }
-
-}
-
-
-/* =========================================================
-   TREE LAYOUT
-========================================================= */
-
-function layoutTree(){
-
-    let counter=0;
-
-    function assign(n,depth){
-
-        if(!n)
-            return;
-
-        assign(n.left,depth+1);
-
-        n._x=counter*90+60;
-        n._y=65+depth*90;
-
-        counter++;
-
-        assign(n.right,depth+1);
-
-    }
-
-    assign(root,0);
-
-}
-
-
-/* =========================================================
-   RENDER TREE
-========================================================= */
-
-function render(){
-
-    const svg=document.getElementById("svg");
-
-    svg.innerHTML="";
-
-
-    if(!root){
-
-        svg.setAttribute(
-            "viewBox",
-            "0 0 900 400"
-        );
+    if(!treeRoot){
 
         return;
-
     }
 
+    const nodes = [];
 
-    layoutTree();
+    function calculate(node,depth,x){
 
+        if(!node) return;
 
-    const nodes=[];
+        const spacing = Math.max(
+            60,
+            300 / Math.pow(2,depth)
+        );
 
+        nodes.push({
 
-    function collect(n){
+            node:node,
 
-        if(!n)
-            return;
+            x:x,
 
-        nodes.push(n);
+            y:80 + depth * 100
 
-        collect(n.left);
-        collect(n.right);
+        });
 
+        calculate(
+            node.left,
+            depth + 1,
+            x - spacing
+        );
+
+        calculate(
+            node.right,
+            depth + 1,
+            x + spacing
+        );
     }
 
-    collect(root);
-
-
-    let maxX=800;
-    let maxY=400;
-
-
-    nodes.forEach(n=>{
-
-        maxX=Math.max(maxX,n._x+80);
-        maxY=Math.max(maxY,n._y+80);
-
-    });
-
-
-    svg.setAttribute(
-        "viewBox",
-        `0 0 ${maxX} ${maxY}`
-    );
-
-
-    const ns=
-        "http://www.w3.org/2000/svg";
-
+    calculate(treeRoot,0,500);
 
     /* EDGES */
 
-    nodes.forEach(n=>{
+    nodes.forEach(item=>{
 
-        if(n.left){
+        const node = item.node;
 
-            drawLine(n,n.left);
+        if(node.left){
 
+            const child = nodes.find(
+                n=>n.node === node.left
+            );
+
+            drawLine(
+                svg,
+                item.x,
+                item.y,
+                child.x,
+                child.y
+            );
         }
 
-        if(n.right){
+        if(node.right){
 
-            drawLine(n,n.right);
+            const child = nodes.find(
+                n=>n.node === node.right
+            );
 
+            drawLine(
+                svg,
+                item.x,
+                item.y,
+                child.x,
+                child.y
+            );
         }
-
     });
 
 
     /* NODES */
 
-    nodes.forEach(n=>{
+    nodes.forEach(item=>{
 
-        const g=
+        const group =
             document.createElementNS(
-                ns,
+                "http://www.w3.org/2000/svg",
                 "g"
             );
 
-
-        g.setAttribute(
+        group.setAttribute(
             "class",
-            "node"
+            "node " +
+            (item.node.color === RED
+                ? "red"
+                : "black")
         );
 
-
-        const circle=
+        const circle =
             document.createElementNS(
-                ns,
+                "http://www.w3.org/2000/svg",
                 "circle"
             );
 
-
         circle.setAttribute(
             "cx",
-            n._x
+            item.x
         );
 
         circle.setAttribute(
             "cy",
-            n._y
+            item.y
         );
 
         circle.setAttribute(
@@ -1830,162 +1236,100 @@ function render(){
         );
 
 
-        circle.setAttribute(
-            "fill",
-            n.color==="R"
-            ? "#ef4444"
-            : "#020617"
-        );
-
-
-        const text=
+        const text =
             document.createElementNS(
-                ns,
+                "http://www.w3.org/2000/svg",
                 "text"
             );
 
-
         text.setAttribute(
             "x",
-            n._x
+            item.x
         );
 
         text.setAttribute(
             "y",
-            n._y
+            item.y
         );
 
-        text.textContent=n.key;
+        text.textContent =
+            item.node.value;
 
 
-        g.appendChild(circle);
-        g.appendChild(text);
+        group.appendChild(circle);
 
+        group.appendChild(text);
 
-        svg.appendChild(g);
+        svg.appendChild(group);
 
     });
 
 }
 
 
-function drawLine(a,b){
+/* =========================================================
+   DRAW LINE
+========================================================= */
 
-    const ns=
-        "http://www.w3.org/2000/svg";
+function drawLine(svg,x1,y1,x2,y2){
 
-
-    const line=
+    const line =
         document.createElementNS(
-            ns,
+            "http://www.w3.org/2000/svg",
             "line"
         );
 
-
     line.setAttribute(
         "x1",
-        a._x
+        x1
     );
 
     line.setAttribute(
         "y1",
-        a._y
+        y1
     );
 
     line.setAttribute(
         "x2",
-        b._x
+        x2
     );
 
     line.setAttribute(
         "y2",
-        b._y
+        y2
     );
-
 
     line.setAttribute(
         "class",
         "edge"
     );
 
-
-    document.getElementById("svg")
-        .appendChild(line);
-
+    svg.appendChild(line);
 }
 
 
 /* =========================================================
-   TABS
+   KEYBOARD
 ========================================================= */
 
-function showTab(id,button){
+document
+.getElementById("valueInput")
+.addEventListener("keydown",function(e){
 
-    document
-        .querySelectorAll(".tab-content")
-        .forEach(el=>{
-            el.classList.remove("active");
-        });
+    if(e.key === "Enter"){
 
-
-    document
-        .querySelectorAll(".tab")
-        .forEach(el=>{
-            el.classList.remove("active");
-        });
-
-
-    document
-        .getElementById(id)
-        .classList.add("active");
-
-
-    button.classList.add("active");
-
-}
-
-
-/* =========================================================
-   KEYBOARD SHORTCUTS
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function(e){
-
-        if(e.code==="Space"){
-
-            e.preventDefault();
-
-            togglePlay();
-
-        }
-
-        if(e.key==="ArrowRight"){
-
-            nextStep();
-
-        }
-
-        if(e.key==="ArrowLeft"){
-
-            previousStep();
-
-        }
+        insertValue();
 
     }
-);
+
+});
 
 
-/* =========================================================
-   INITIAL
-========================================================= */
+/* INITIAL */
 
-render();
+drawTree(null);
 
 </script>
 
 </body>
 </html>
-
-
